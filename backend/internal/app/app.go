@@ -15,6 +15,8 @@ import (
 	"github.com/MAXXXIMUS-tropical-milkshake/MAXXXIMUS_Calculator/config"
 	"github.com/MAXXXIMUS-tropical-milkshake/MAXXXIMUS_Calculator/pkg/logger"
 	"github.com/MAXXXIMUS-tropical-milkshake/MAXXXIMUS_Calculator/pkg/postgres"
+	baseValidator "github.com/go-playground/validator/v10"
+	"github.com/MAXXXIMUS-tropical-milkshake/MAXXXIMUS_Calculator/internal/controller/http/model/validator"
 )
 
 // Run creates objects via constructors.
@@ -35,6 +37,8 @@ func Run(cfg *config.Config) {
 	entityStore := entity.New(pg)
 	// Services
 	entityService := name.New(entityStore)
+	// Validator
+	formValidator := validator.New(ctx, baseValidator.New())
 
 	// HTTP Server
 	app := fiber.New(fiber.Config{
@@ -45,7 +49,7 @@ func Run(cfg *config.Config) {
 	app.Use(recover.New())
 	app.Use(cors.New())
 
-	v1.NewRouter(app, entityService, nil)
+	v1.NewRouter(app, entityService, formValidator)
 
 	logger.Log().Info(ctx, "server was started on %s", cfg.HTTP.Port)
 	err = app.Listen(cfg.HTTP.Port)

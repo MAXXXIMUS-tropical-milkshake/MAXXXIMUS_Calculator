@@ -1,18 +1,18 @@
 package http
 
 import (
+	"github.com/MAXXXIMUS-tropical-milkshake/MAXXXIMUS_Calculator/internal/controller/http/model"
 	modelCalculator "github.com/MAXXXIMUS-tropical-milkshake/MAXXXIMUS_Calculator/internal/controller/http/model/calculator"
 	"github.com/MAXXXIMUS-tropical-milkshake/MAXXXIMUS_Calculator/pkg/logger"
-	"github.com/gofiber/fiber/v2"
 	"github.com/Pramod-Devireddy/go-exprtk"
+	"github.com/gofiber/fiber/v2"
 )
 
 func (r *Router) calculate(ctx *fiber.Ctx) error {
 	var calculator modelCalculator.Calculator 
-	
-	if err := ctx.QueryParser(&calculator); err != nil {
-		logger.Log().Error(ctx.UserContext(), err.Error())
-		return ctx.Status(fiber.StatusBadRequest).JSON(err.Error())
+	fiberError, parseOrValidationError := parseQueryAndValidate(ctx, r.formValidator, &calculator)
+	if fiberError != nil || parseOrValidationError != nil {
+		return fiberError
 	}
 
 	exprtkObj := exprtk.NewExprtk()
@@ -23,8 +23,8 @@ func (r *Router) calculate(ctx *fiber.Ctx) error {
 	err := exprtkObj.CompileExpression()
 	if err != nil {
 		logger.Log().Error(ctx.UserContext(), err.Error())
-		return ctx.Status(fiber.StatusBadRequest).JSON(err.Error())
+		return ctx.Status(fiber.StatusBadRequest).JSON(model.ErrorResponse(err.Error()))
 	}
 
-	return ctx.Status(fiber.StatusOK).JSON(exprtkObj.GetEvaluatedValue())
+	return ctx.Status(fiber.StatusOK).JSON(model.OKResponse(exprtkObj.GetEvaluatedValue()))
 }

@@ -38,6 +38,9 @@ func (r *Router) initRoutes() {
 	// entities
 	v1.Get("/entities", r.getEntities)
 	v1.Get("/entities/:id", r.getEntityByID)
+
+	// calculator
+	v1.Get("/calculate", r.calculate)
 }
 
 // initRequestMiddlewares initializes all middlewares for http requests

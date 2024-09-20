@@ -1,3 +1,5 @@
+github.com/Pramod-Devireddy/go-exprtk v1.1.0 h1:U/uvXm5UMQ25p6PCnThz51WsxDqAeoynzdnhpQEAxZo=
+github.com/Pramod-Devireddy/go-exprtk v1.1.0/go.mod h1:GbqdmGxU1ESDj3lu8mPbffejPB5UoOtm6eB7qr3YZ94=
 github.com/andybalholm/brotli v1.0.5 h1:8uQZIdzKmjc/iuPu7O2ioW48L81FgatrcpfFmiq/cCs=
 github.com/andybalholm/brotli v1.0.5/go.mod h1:fO7iG3H7G2nSZ7m0zPUDn85XEX2GTukHGRSepvi9Eig=
 github.com/coreos/go-systemd/v22 v22.5.0/go.mod h1:Y58oyj3AT4RCenI/lSvhwexgC+NSVTIJ3seZv2GcEnc=

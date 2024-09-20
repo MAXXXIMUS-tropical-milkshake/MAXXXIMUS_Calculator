@@ -26,7 +26,7 @@ func (r *Router) calculate(ctx *fiber.Ctx) error {
 		return ctx.Status(fiber.StatusBadRequest).JSON(model.ErrorResponse(err.Error()))
 	}
 
-	res := calculatorModel.ToResponse(exprtkObj.GetEvaluatedValue())
+	res := exprtkObj.GetEvaluatedValue()
 
 	return ctx.Status(fiber.StatusOK).JSON(model.OKResponse(res))
 }

@@ -12,7 +12,7 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
-    command: "./backend -db_url postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB} -port ${PORT} -log_level ${LOG_LEVEL}"
+    command: "./bin/main -db_url postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB} -port ${PORT} -log_level ${LOG_LEVEL}"
 
   postgres:
     image: postgres:16.4-alpine

@@ -8,5 +8,5 @@ RUN go mod download
 RUN go build -o bin/main ./cmd/main.go
 
 FROM alpine:latest
-WORKDIR /root
+WORKDIR /app
 COPY --from=builder ./app/bin ./bin

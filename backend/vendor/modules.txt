@@ -29,6 +29,9 @@ github.com/gofiber/fiber/v2/middleware/cors
 github.com/gofiber/fiber/v2/middleware/logger
 github.com/gofiber/fiber/v2/middleware/recover
 github.com/gofiber/fiber/v2/utils
+# github.com/golang-jwt/jwt v3.2.2+incompatible
+## explicit
+github.com/golang-jwt/jwt
 # github.com/golang-migrate/migrate/v4 v4.18.1
 ## explicit; go 1.22.0
 github.com/golang-migrate/migrate/v4

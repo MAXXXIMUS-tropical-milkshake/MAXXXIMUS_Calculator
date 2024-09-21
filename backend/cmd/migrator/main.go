@@ -13,12 +13,12 @@ import (
 func main() {
 	var storagePath, migrationsPath string
 
-	flag.StringVar(&storagePath, "db_url", "", "path to db")
+	flag.StringVar(&storagePath, "db_url", "", "url to db")
 	flag.StringVar(&migrationsPath, "migrations_path", "", "path to migrations")
 	flag.Parse()
 
 	if storagePath == "" {
-		panic("storage_path is required")
+		panic("db_url is required")
 	}
 
 	if migrationsPath == "" {

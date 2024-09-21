@@ -3,8 +3,9 @@ package validator
 import (
 	"context"
 	"errors"
-	"github.com/MAXXXIMUS-tropical-milkshake/MAXXXIMUS_Calculator/pkg/logger"
 	"regexp"
+
+	"github.com/MAXXXIMUS-tropical-milkshake/MAXXXIMUS_Calculator/pkg/logger"
 
 	validatorPkg "github.com/go-playground/validator/v10"
 )
@@ -38,7 +39,7 @@ func customValidationOptions(ctx context.Context, validator *validatorPkg.Valida
 }
 
 func New(ctx context.Context, validator *validatorPkg.Validate) FormValidatorService {
-	logger.Log().Info(context.Background(), "validator created")
+	logger.Log().Info(ctx, "validator created")
 	customValidationOptions(ctx, validator)
 	return &formValidator{
 		validator: validator,

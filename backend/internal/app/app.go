@@ -7,17 +7,19 @@ import (
 	"syscall"
 
 	v1 "github.com/MAXXXIMUS-tropical-milkshake/MAXXXIMUS_Calculator/internal/controller/http"
+	"github.com/MAXXXIMUS-tropical-milkshake/MAXXXIMUS_Calculator/internal/service/auth"
 	"github.com/MAXXXIMUS-tropical-milkshake/MAXXXIMUS_Calculator/internal/service/name"
 	"github.com/MAXXXIMUS-tropical-milkshake/MAXXXIMUS_Calculator/internal/store/entity"
+	"github.com/MAXXXIMUS-tropical-milkshake/MAXXXIMUS_Calculator/internal/store/user"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
 	"github.com/gofiber/fiber/v2/middleware/recover"
 
 	"github.com/MAXXXIMUS-tropical-milkshake/MAXXXIMUS_Calculator/config"
+	"github.com/MAXXXIMUS-tropical-milkshake/MAXXXIMUS_Calculator/internal/controller/http/model/validator"
 	"github.com/MAXXXIMUS-tropical-milkshake/MAXXXIMUS_Calculator/pkg/logger"
 	"github.com/MAXXXIMUS-tropical-milkshake/MAXXXIMUS_Calculator/pkg/postgres"
 	baseValidator "github.com/go-playground/validator/v10"
-	"github.com/MAXXXIMUS-tropical-milkshake/MAXXXIMUS_Calculator/internal/controller/http/model/validator"
 )
 
 // Run creates objects via constructors.
@@ -36,8 +38,10 @@ func Run(cfg *config.Config) {
 
 	// Stores
 	entityStore := entity.New(pg)
+	userStore := user.New(pg)
 	// Services
 	entityService := name.New(entityStore)
+	authService := auth.New(userStore)
 	// Validator
 	formValidator := validator.New(ctx, baseValidator.New())
 
@@ -49,8 +53,9 @@ func Run(cfg *config.Config) {
 	})
 	app.Use(recover.New())
 	app.Use(cors.New())
+	app.Use(v1.InjectJWTSecretMiddleware(cfg.JWTSecret))
 
-	v1.NewRouter(app, entityService, formValidator)
+	v1.NewRouter(app, entityService, formValidator, authService)
 
 	logger.Log().Info(ctx, "server was started on %s", cfg.HTTP.Port)
 	err = app.Listen(cfg.HTTP.Port)

@@ -1,27 +1,30 @@
 package http
 
 import (
+	"github.com/MAXXXIMUS-tropical-milkshake/MAXXXIMUS_Calculator/internal/controller/http/model/validator"
 	"github.com/MAXXXIMUS-tropical-milkshake/MAXXXIMUS_Calculator/internal/core"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/logger"
-	"github.com/MAXXXIMUS-tropical-milkshake/MAXXXIMUS_Calculator/internal/controller/http/model/validator"
 )
 
 type Router struct {
 	app           *fiber.App
 	formValidator validator.FormValidatorService
 	entityService core.EntityService
+	authService   core.AuthService
 }
 
 func NewRouter(
 	app *fiber.App,
 	entityService core.EntityService,
 	formValidator validator.FormValidatorService,
+	authService core.AuthService,
 ) {
 	router := &Router{
 		app:           app,
-		formValidator:  formValidator,
+		formValidator: formValidator,
 		entityService: entityService,
+		authService:   authService,
 	}
 
 	router.initRequestMiddlewares()
@@ -42,6 +45,12 @@ func (r *Router) initRoutes() {
 
 	// calculator
 	v1.Get("/calculate", r.calculate)
+
+	// auth
+	v1.Post("/auth/signup", r.signup)
+
+	// e.g. protected
+	v1.Get("/protected", r.protectedMiddleware(), r.protected)
 }
 
 // initRequestMiddlewares initializes all middlewares for http requests

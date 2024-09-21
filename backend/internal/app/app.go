@@ -12,12 +12,16 @@ import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
 	"github.com/gofiber/fiber/v2/middleware/recover"
+	historystore "github.com/MAXXXIMUS-tropical-milkshake/MAXXXIMUS_Calculator/internal/store/history"
+	historyservice "github.com/MAXXXIMUS-tropical-milkshake/MAXXXIMUS_Calculator/internal/service/history"
+
 
 	"github.com/MAXXXIMUS-tropical-milkshake/MAXXXIMUS_Calculator/config"
+	//"github.com/MAXXXIMUS-tropical-milkshake/MAXXXIMUS_Calculator/internal/controller/http/model/history"
+	"github.com/MAXXXIMUS-tropical-milkshake/MAXXXIMUS_Calculator/internal/controller/http/model/validator"
 	"github.com/MAXXXIMUS-tropical-milkshake/MAXXXIMUS_Calculator/pkg/logger"
 	"github.com/MAXXXIMUS-tropical-milkshake/MAXXXIMUS_Calculator/pkg/postgres"
 	baseValidator "github.com/go-playground/validator/v10"
-	"github.com/MAXXXIMUS-tropical-milkshake/MAXXXIMUS_Calculator/internal/controller/http/model/validator"
 )
 
 // Run creates objects via constructors.
@@ -36,8 +40,12 @@ func Run(cfg *config.Config) {
 
 	// Stores
 	entityStore := entity.New(pg)
+	historyStore := historystore.New(pg)
+
 	// Services
 	entityService := name.New(entityStore)
+	historyService := historyservice.New(historyStore)
+
 	// Validator
 	formValidator := validator.New(ctx, baseValidator.New())
 
@@ -50,7 +58,8 @@ func Run(cfg *config.Config) {
 	app.Use(recover.New())
 	app.Use(cors.New())
 
-	v1.NewRouter(app, entityService, formValidator)
+	v1.NewRouter(app, entityService, historyService, formValidator)
+
 
 	logger.Log().Info(ctx, "server was started on %s", cfg.HTTP.Port)
 	err = app.Listen(cfg.HTTP.Port)

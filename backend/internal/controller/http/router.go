@@ -10,16 +10,19 @@ import (
 type Router struct {
 	app           *fiber.App
 	formValidator validator.FormValidatorService
+	historyService core.HistoryService
 	entityService core.EntityService
 }
 
 func NewRouter(
 	app *fiber.App,
 	entityService core.EntityService,
+	historyService core.HistoryService,
 	formValidator validator.FormValidatorService,
 ) {
 	router := &Router{
 		app:           app,
+		historyService: historyService,
 		formValidator:  formValidator,
 		entityService: entityService,
 	}
@@ -42,6 +45,9 @@ func (r *Router) initRoutes() {
 
 	// calculator
 	v1.Get("/calculate", r.calculate)
+
+	// history
+	v1.Get("/history", r.getHistory)
 }
 
 // initRequestMiddlewares initializes all middlewares for http requests

@@ -9,10 +9,10 @@ BUILD_FLAGS=
 PG_URL=postgres://postgres:postgres@localhost:5432/calculator
 
 run: ### run app
-	go run cmd/main.go -db_url '$(PG_URL)' -port localhost:8080 -log_level info
+	go run cmd/calculator/main.go -db_url '$(PG_URL)' -port localhost:8080 -log_level info
 
 build: ### build app
-	go build ${BUILD_FLAGS} -o ${SERVICE_NAME} cmd/main.go
+	go build ${BUILD_FLAGS} -o ${SERVICE_NAME} cmd/calculator/main.go
 
 lint: ### run linter
 	@golangci-lint --timeout=2m run

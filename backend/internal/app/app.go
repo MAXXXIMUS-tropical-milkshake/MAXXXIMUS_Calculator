@@ -2,15 +2,16 @@ package app
 
 import (
 	"context"
+	"os"
+	"os/signal"
+	"syscall"
+
 	v1 "github.com/MAXXXIMUS-tropical-milkshake/MAXXXIMUS_Calculator/internal/controller/http"
 	"github.com/MAXXXIMUS-tropical-milkshake/MAXXXIMUS_Calculator/internal/service/name"
 	"github.com/MAXXXIMUS-tropical-milkshake/MAXXXIMUS_Calculator/internal/store/entity"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
 	"github.com/gofiber/fiber/v2/middleware/recover"
-	"os"
-	"os/signal"
-	"syscall"
 
 	"github.com/MAXXXIMUS-tropical-milkshake/MAXXXIMUS_Calculator/config"
 	"github.com/MAXXXIMUS-tropical-milkshake/MAXXXIMUS_Calculator/pkg/logger"

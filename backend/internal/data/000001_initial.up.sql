@@ -2,7 +2,7 @@ CREATE TABLE IF NOT EXISTS "history" (
   "id" serial PRIMARY KEY,
   "user_id" integer NOT NULL,
   "expression" text NOT NULL,
-  "created_at" timestamp NOT NULL
+  "created_at" timestamp NOT NULL DEFAULT NOW()
 );
 
 CREATE TABLE IF NOT EXISTS "users" (

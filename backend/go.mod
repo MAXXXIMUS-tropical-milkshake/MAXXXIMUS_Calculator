@@ -3,6 +3,7 @@ module github.com/MAXXXIMUS-tropical-milkshake/MAXXXIMUS_Calculator
 go 1.22.5
 
 require (
+	github.com/Pramod-Devireddy/go-exprtk v1.1.0
 	github.com/gofiber/fiber/v2 v2.52.5
 	github.com/golang-migrate/migrate/v4 v4.18.1
 	github.com/rs/zerolog v1.33.0

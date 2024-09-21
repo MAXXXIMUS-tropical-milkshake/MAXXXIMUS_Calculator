@@ -3,7 +3,6 @@ module github.com/MAXXXIMUS-tropical-milkshake/MAXXXIMUS_Calculator
 go 1.22.5
 
 require (
-	github.com/Pramod-Devireddy/go-exprtk v1.1.0
 	github.com/gofiber/fiber/v2 v2.52.5
 	github.com/golang-migrate/migrate/v4 v4.18.1
 	github.com/rs/zerolog v1.33.0
@@ -12,6 +11,8 @@ require (
 )
 
 require github.com/golang-jwt/jwt v3.2.2+incompatible
+
+require github.com/Knetic/govaluate v3.0.0+incompatible
 
 require (
 	github.com/andybalholm/brotli v1.0.5 // indirect

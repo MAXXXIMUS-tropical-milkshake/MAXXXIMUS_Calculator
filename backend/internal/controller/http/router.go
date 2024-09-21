@@ -4,23 +4,24 @@ import (
 	"github.com/MAXXXIMUS-tropical-milkshake/MAXXXIMUS_Calculator/internal/core"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/logger"
+	"github.com/MAXXXIMUS-tropical-milkshake/MAXXXIMUS_Calculator/internal/controller/http/model/validator"
 )
 
 type Router struct {
 	app           *fiber.App
+	formValidator validator.FormValidatorService
 	entityService core.EntityService
-	authService   interface{}
 }
 
 func NewRouter(
 	app *fiber.App,
 	entityService core.EntityService,
-	authService interface{},
+	formValidator validator.FormValidatorService,
 ) {
 	router := &Router{
 		app:           app,
+		formValidator:  formValidator,
 		entityService: entityService,
-		authService:   authService,
 	}
 
 	router.initRequestMiddlewares()

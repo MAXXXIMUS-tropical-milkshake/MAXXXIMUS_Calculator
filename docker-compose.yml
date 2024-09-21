@@ -12,7 +12,9 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
-    command: "./bin/main -db_url postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB} -port ${PORT} -log_level ${LOG_LEVEL}"
+    command: >
+      sh -c "./bin/migrator -db_url postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB} -migrations_path ${MIGRATIONS_PATH} &&
+      ./bin/calculator -db_url postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB} -port ${PORT} -log_level ${LOG_LEVEL}"
 
   postgres:
     image: postgres:16.4-alpine

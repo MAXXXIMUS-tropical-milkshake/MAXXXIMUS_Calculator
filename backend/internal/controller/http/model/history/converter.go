@@ -27,3 +27,10 @@ func ToResponse(meta pagination.Pagination, histories []core.History) Response {
 		History: res,
 	}
 }
+
+func (h *History) ToCoreHistory() core.History {
+	return core.History{
+		UserID: h.UserID,
+		Expression: h.Expression,
+	}
+}

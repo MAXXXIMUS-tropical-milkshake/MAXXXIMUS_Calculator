@@ -17,14 +17,14 @@ type (
 		GetAllUserHistoryByID(ctx context.Context, userID int, params GetAllParams) ([]History, error)
 		SaveHistory(ctx context.Context, history History) (History, error) // не факт, что передаются такие параметры
 		DeleteAllHistory(ctx context.Context, userID int) error
-		DeleteHistoryByID(ctx context.Context, historyID int) error
+		DeleteHistoryByID(ctx context.Context, historyID int, userID int) error
 	}
 
 	HistoryStore interface {
 		GetAllUserHistoryByID(ctx context.Context, userID int, params GetAllParams) ([]History, error)
 		SaveHistory(ctx context.Context, history History) (History, error) // не факт, что передаются такие параметры
 		DeleteAllHistory(ctx context.Context, userID int) error
-		DeleteHistoryByID(ctx context.Context, historyID int) error
+		DeleteHistoryByID(ctx context.Context, historyID int, userID int) error
 	}
 
 	GetAllParams struct {

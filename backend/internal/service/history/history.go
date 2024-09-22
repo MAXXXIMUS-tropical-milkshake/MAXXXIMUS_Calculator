@@ -28,6 +28,6 @@ func (s *service) DeleteAllHistory(ctx context.Context, userID int) (err error) 
 	return s.historyStore.DeleteAllHistory(ctx, userID)
 }
 
-func (s *service) DeleteHistoryByID(ctx context.Context, historyID int) (err error) {
-	return s.historyStore.DeleteHistoryByID(ctx, historyID)
+func (s *service) DeleteHistoryByID(ctx context.Context, historyID int, userID int) (err error) {
+	return s.historyStore.DeleteHistoryByID(ctx, historyID, userID)
 }

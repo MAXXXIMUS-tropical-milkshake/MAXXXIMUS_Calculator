@@ -7,6 +7,7 @@ import (
 	"github.com/MAXXXIMUS-tropical-milkshake/MAXXXIMUS_Calculator/internal/controller/http/model/validator"
 	"github.com/MAXXXIMUS-tropical-milkshake/MAXXXIMUS_Calculator/pkg/logger"
 	"github.com/gofiber/fiber/v2"
+	"github.com/MAXXXIMUS-tropical-milkshake/MAXXXIMUS_Calculator/internal/controller/http/model/pagination"
 )
 
 func parseQueryAndValidate(ctx *fiber.Ctx, formValidator validator.FormValidatorService, data interface{}) (fiberError, parseOrValidationError error) {
@@ -45,4 +46,19 @@ func getUserIDFromContext(ctx *fiber.Ctx) (*int, error) {
 	}
 
 	return &userID, nil
+}
+
+func paginate(total, limit, offset int) pagination.Pagination {
+	var (
+		currentPage = (offset / limit) + 1
+		perPage     = limit
+		totalPages  = (total + perPage - 1) / perPage
+	)
+
+	return pagination.Pagination{
+		Total:       total,
+		TotalPages:  totalPages,
+		CurrentPage: currentPage,
+		PerPage:     perPage,
+	}
 }

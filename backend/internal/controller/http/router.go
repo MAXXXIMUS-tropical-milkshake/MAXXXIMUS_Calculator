@@ -8,23 +8,23 @@ import (
 )
 
 type Router struct {
-	app           *fiber.App
-	formValidator validator.FormValidatorService
-	entityService core.EntityService
-	authService   core.AuthService
+	app            *fiber.App
+	formValidator  validator.FormValidatorService
+	authService    core.AuthService
+	historyService core.HistoryService
 }
 
 func NewRouter(
-	app *fiber.App,
-	entityService core.EntityService,
-	formValidator validator.FormValidatorService,
-	authService core.AuthService,
+	app 		   *fiber.App,
+	formValidator  validator.FormValidatorService,
+	authService    core.AuthService,
+	historyService core.HistoryService,
 ) {
 	router := &Router{
-		app:           app,
-		formValidator: formValidator,
-		entityService: entityService,
-		authService:   authService,
+		app:            app,
+		formValidator:  formValidator,
+		authService:    authService,
+		historyService: historyService,
 	}
 
 	router.initRequestMiddlewares()
@@ -35,16 +35,18 @@ func NewRouter(
 }
 
 func (r *Router) initRoutes() {
-	r.app.Get("/message", r.messageFromMaxim)
+	r.app.Get("/message", r.message)
 
 	v1 := r.app.Group("/api/v1")
 
-	// entities
-	v1.Get("/entities", r.getEntities)
-	v1.Get("/entities/:id", r.getEntityByID)
-
 	// calculator
 	v1.Get("/calculate", r.calculate)
+
+	// history
+	v1.Get("/history", r.protectedMiddleware(), r.getAllHistory)
+	v1.Post("/history", r.protectedMiddleware(), r.saveHistory)
+	v1.Delete("/history", r.protectedMiddleware(), r.deleteHistory)
+	v1.Delete("/history/:record_id", r.protectedMiddleware(), r.deleteHistoryByID)
 
 	// auth
 	v1.Post("/auth/signup", r.signup)

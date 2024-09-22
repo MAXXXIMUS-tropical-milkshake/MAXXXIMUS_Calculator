@@ -3,8 +3,6 @@ package http
 import (
 	"github.com/MAXXXIMUS-tropical-milkshake/MAXXXIMUS_Calculator/internal/controller/http/model"
 	"github.com/MAXXXIMUS-tropical-milkshake/MAXXXIMUS_Calculator/internal/controller/http/model/history"
-
-	//"github.com/MAXXXIMUS-tropical-milkshake/MAXXXIMUS_Calculator/internal/core"
 	"github.com/MAXXXIMUS-tropical-milkshake/MAXXXIMUS_Calculator/pkg/logger"
 	"github.com/gofiber/fiber/v2"
 )
@@ -91,6 +89,12 @@ func (r *Router) deleteHistoryByID(ctx *fiber.Ctx) error {
 	}
 
 	historyID, err := ctx.ParamsInt("record_id")
+
+	if err != nil {
+		logger.Log().Error(ctx.UserContext(), err.Error())
+		return ctx.Status(fiber.StatusBadRequest).JSON(model.ErrorResponse(err.Error()))
+	}
+
 	err = r.historyService.DeleteHistoryByID(ctx.UserContext(), historyID, *userID)
 
 	if err != nil {

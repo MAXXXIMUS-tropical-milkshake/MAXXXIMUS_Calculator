@@ -52,11 +52,11 @@ func (s *store) DeleteAllHistory(ctx context.Context, userID int) (err error) {
 	return nil
 }
 
-func (s *store) DeleteHistoryByID(ctx context.Context, historyID int, userID int) (err error) {
+func (s *store) DeleteHistoryByID(ctx context.Context, historyID, userID int) (err error) {
 	if err := s.DB.WithContext(ctx).Where("id = ? AND user_id = ?", historyID, userID).Delete(&core.History{}).Error; err != nil {
-        logger.Log().Error(ctx, err.Error())
-        return err
-    }
+		logger.Log().Error(ctx, err.Error())
+		return err
+	}
 
-    return nil
+	return nil
 }

@@ -8,8 +8,6 @@ import (
 
 	v1 "github.com/MAXXXIMUS-tropical-milkshake/MAXXXIMUS_Calculator/internal/controller/http"
 	"github.com/MAXXXIMUS-tropical-milkshake/MAXXXIMUS_Calculator/internal/service/auth"
-	"github.com/MAXXXIMUS-tropical-milkshake/MAXXXIMUS_Calculator/internal/service/name"
-	"github.com/MAXXXIMUS-tropical-milkshake/MAXXXIMUS_Calculator/internal/store/entity"
 	"github.com/MAXXXIMUS-tropical-milkshake/MAXXXIMUS_Calculator/internal/store/user"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
@@ -20,6 +18,8 @@ import (
 	"github.com/MAXXXIMUS-tropical-milkshake/MAXXXIMUS_Calculator/pkg/logger"
 	"github.com/MAXXXIMUS-tropical-milkshake/MAXXXIMUS_Calculator/pkg/postgres"
 	baseValidator "github.com/go-playground/validator/v10"
+	historystore"github.com/MAXXXIMUS-tropical-milkshake/MAXXXIMUS_Calculator/internal/store/history"
+	historyservice "github.com/MAXXXIMUS-tropical-milkshake/MAXXXIMUS_Calculator/internal/service/history"
 )
 
 // Run creates objects via constructors.
@@ -37,11 +37,11 @@ func Run(cfg *config.Config) {
 	defer pg.Close(ctx)
 
 	// Stores
-	entityStore := entity.New(pg)
 	userStore := user.New(pg)
+	historyStore := historystore.New(pg)
 	// Services
-	entityService := name.New(entityStore)
 	authService := auth.New(userStore)
+	historyService := historyservice.New(historyStore)
 	// Validator
 	formValidator := validator.New(ctx, baseValidator.New())
 
@@ -55,7 +55,7 @@ func Run(cfg *config.Config) {
 	app.Use(cors.New())
 	app.Use(v1.InjectJWTSecretMiddleware(cfg.JWTSecret))
 
-	v1.NewRouter(app, entityService, formValidator, authService)
+	v1.NewRouter(app, formValidator, authService, historyService)
 
 	logger.Log().Info(ctx, "server was started on %s", cfg.HTTP.Port)
 	err = app.Listen(cfg.HTTP.Port)

@@ -1,12 +1,13 @@
 package http
 
 import (
+	"errors"
+
 	"github.com/MAXXXIMUS-tropical-milkshake/MAXXXIMUS_Calculator/internal/controller/http/model"
 	"github.com/MAXXXIMUS-tropical-milkshake/MAXXXIMUS_Calculator/internal/controller/http/model/history"
+	"github.com/MAXXXIMUS-tropical-milkshake/MAXXXIMUS_Calculator/internal/core"
 	"github.com/MAXXXIMUS-tropical-milkshake/MAXXXIMUS_Calculator/pkg/logger"
 	"github.com/gofiber/fiber/v2"
-	"errors"
-	"github.com/MAXXXIMUS-tropical-milkshake/MAXXXIMUS_Calculator/internal/core"
 )
 
 func (r *Router) getAllHistory(ctx *fiber.Ctx) error {
@@ -29,10 +30,7 @@ func (r *Router) getAllHistory(ctx *fiber.Ctx) error {
 		return ctx.Status(fiber.StatusInternalServerError).JSON(model.ErrorResponse(err.Error()))
 	}
 
-	total := len(histories)
-
-	pagination := paginate(total, getAllParams.Limit, getAllParams.Offset)
-
+	pagination := paginate(len(histories), getAllParams.Limit, getAllParams.Offset)
 	response := history.ToResponse(pagination, histories)
 
 	return ctx.Status(fiber.StatusOK).JSON(model.OKResponse(response))

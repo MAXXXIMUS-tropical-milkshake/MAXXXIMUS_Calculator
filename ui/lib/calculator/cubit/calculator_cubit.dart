@@ -34,6 +34,7 @@ class CalculatorCubit extends Cubit<String> {
   }
 
   void insertOp(String op) {
+    if (!_supportedOps.contains(op)) return;
     if (state.isEmpty) return;
     if (lastisop) {
         emit(state.substring(0, state.length - 1) + op);

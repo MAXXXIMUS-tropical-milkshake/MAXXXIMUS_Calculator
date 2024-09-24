@@ -16,10 +16,7 @@ func ToResponse(meta pagination.Pagination, histories []core.History) Response {
 	res := make([]HistoryResponse, len(histories))
 
 	for i, history := range histories {
-		res[i] = HistoryResponse{
-			UserID:     history.UserID,
-			Expression: history.Expression,
-		}
+		res[i] = ToHistoryResponse(history)
 	}
 
 	return Response{
@@ -28,9 +25,16 @@ func ToResponse(meta pagination.Pagination, histories []core.History) Response {
 	}
 }
 
-func (h *History) ToCoreHistory() core.History {
+func ToHistoryResponse(history core.History) HistoryResponse {
+	return HistoryResponse{
+		UserID:     history.UserID,
+		Expression: history.Expression,
+	}
+}
+
+func (h *History) ToCoreHistory(userID int) core.History {
 	return core.History{
-		UserID: h.UserID,
+		UserID:     userID,
 		Expression: h.Expression,
 	}
 }

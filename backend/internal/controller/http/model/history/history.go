@@ -6,7 +6,6 @@ import (
 
 type (
 	History struct {
-		UserID     int    `json:"user_id"`
 		Expression string `json:"expression"`
 	}
 

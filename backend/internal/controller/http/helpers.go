@@ -2,7 +2,7 @@ package http
 
 import (
 	"fmt"
-
+	"errors"
 	"github.com/MAXXXIMUS-tropical-milkshake/MAXXXIMUS_Calculator/internal/controller/http/model"
 	"github.com/MAXXXIMUS-tropical-milkshake/MAXXXIMUS_Calculator/internal/controller/http/model/validator"
 	"github.com/MAXXXIMUS-tropical-milkshake/MAXXXIMUS_Calculator/pkg/logger"
@@ -12,6 +12,20 @@ import (
 
 func parseQueryAndValidate(ctx *fiber.Ctx, formValidator validator.FormValidatorService, data interface{}) (fiberError, parseOrValidationError error) {
 	if err := ctx.QueryParser(data); err != nil {
+		logger.Log().Error(ctx.UserContext(), err.Error())
+		return ctx.Status(fiber.StatusBadRequest).JSON(model.ErrorResponse(err.Error())), err
+	}
+
+	return validate(ctx, formValidator, data)
+}
+
+func parseBodyAndValidate(ctx *fiber.Ctx, formValidator validator.FormValidatorService, data interface{}) (fiberError, parseOrValidationError error) {
+	if err := ctx.BodyParser(data); err != nil {
+		if errors.Is(err, fiber.ErrUnprocessableEntity) {
+			logger.Log().Debug(ctx.UserContext(), err.Error())
+			return ctx.Status(fiber.StatusBadRequest).JSON(model.ErrorResponse(model.ErrInvalidBody.Error())), err
+		}
+
 		logger.Log().Error(ctx.UserContext(), err.Error())
 		return ctx.Status(fiber.StatusBadRequest).JSON(model.ErrorResponse(err.Error())), err
 	}

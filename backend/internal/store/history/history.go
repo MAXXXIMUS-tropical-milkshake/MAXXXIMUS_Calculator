@@ -2,7 +2,7 @@ package history
 
 import (
 	"context"
-
+	"errors"
 	"github.com/MAXXXIMUS-tropical-milkshake/MAXXXIMUS_Calculator/internal/core"
 	"github.com/MAXXXIMUS-tropical-milkshake/MAXXXIMUS_Calculator/pkg/logger"
 	"github.com/MAXXXIMUS-tropical-milkshake/MAXXXIMUS_Calculator/pkg/postgres"
@@ -41,20 +41,28 @@ func (s *store) SaveHistory(ctx context.Context, history core.History) (data cor
 		logger.Log().Error(ctx, err.Error())
 		return core.History{}, err
 	}
+	
 	return history, nil
 }
 
 func (s *store) DeleteAllHistory(ctx context.Context, userID int) (err error) {
 	if err := s.DB.WithContext(ctx).Where("user_id = ?", userID).Delete(&core.History{}).Error; err != nil {
 		logger.Log().Error(ctx, err.Error())
+		if errors.Is(err, core.ErrRecordNotFound) {
+			return core.ErrHistoryNotFound
+		}
 		return err
 	}
+
 	return nil
 }
 
 func (s *store) DeleteHistoryByID(ctx context.Context, historyID, userID int) (err error) {
 	if err := s.DB.WithContext(ctx).Where("id = ? AND user_id = ?", historyID, userID).Delete(&core.History{}).Error; err != nil {
 		logger.Log().Error(ctx, err.Error())
+		if errors.Is(err, core.ErrRecordNotFound) {
+			return core.ErrHistoryNotFound
+		}
 		return err
 	}
 

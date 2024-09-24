@@ -1,12 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:ui/calculator/calculator_client.dart';
 
-const _supportedOps = [
-  "+",
-  "-",
-  "*",
-  "/",
-];
+const _supportedOps = ["-", "+", "×", "÷"];
 const _supportedNonOps = [
   "1",
   "2",
@@ -39,8 +34,8 @@ class CalculatorCubit extends Cubit<String> {
     if (!_supportedOps.contains(op)) return;
     if (state.isEmpty) return;
     if (lastisop) {
-        emit(state.substring(0, state.length - 1) + op);
-        return;
+      emit(state.substring(0, state.length - 1) + op);
+      return;
     }
     emit(state + op);
     lastisop = true;

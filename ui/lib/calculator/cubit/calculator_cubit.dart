@@ -18,8 +18,10 @@ const _supportedNonOps = [
   "8",
   "9",
   "0",
-  "00",
-  "."
+  "0",
+  ".",
+  "(",
+  ")"
 ];
 
 bool lastisop = false;

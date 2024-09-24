@@ -60,7 +60,17 @@ class CalculatorView extends StatelessWidget {
       foregroundColor: Colors.white,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(50),
-      ),  
+      ),
+    );
+
+    final buttonStyleHistory = ElevatedButton.styleFrom(
+      padding: const EdgeInsets.all(16),
+      textStyle: const TextStyle(fontSize: 20),
+      backgroundColor: const Color.fromARGB(255, 26, 23, 23),
+      foregroundColor: Colors.white,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(50),
+      ),
     );
 
     return Scaffold(
@@ -76,19 +86,28 @@ class CalculatorView extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
+                Align(
+                    alignment: Alignment.center,
+                    child: ElevatedButton(
+                      style: buttonStyleHistory,
+                      onPressed: () => context.go("/history"),
+                      child: const Text("History"),
+                    )),
+                const SizedBox(height: 10),
                 Expanded(
                   flex: 2,
                   child: Container(
                     padding: const EdgeInsets.all(16.0),
                     decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(12), 
+                      borderRadius: BorderRadius.circular(12),
                       color: const Color.fromARGB(255, 97, 97, 97),
                     ),
                     child: Align(
                       alignment: Alignment.centerRight,
                       child: Text(
-                        displayState, 
-                        style: textTheme.displayMedium?.copyWith(fontSize: 48, color: Colors.white),
+                        displayState,
+                        style: textTheme.displayMedium
+                            ?.copyWith(fontSize: 48, color: Colors.white),
                         textAlign: TextAlign.right,
                       ),
                     ),
@@ -187,19 +206,10 @@ class CalculatorView extends StatelessWidget {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      CalculatorButton(buttonStyle: buttonStyle, symbol: '00'),
                       CalculatorButton(buttonStyle: buttonStyle, symbol: '0'),
-                      CalculatorButton(buttonStyle: buttonStyle, symbol: '.'),
-                      Expanded(
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: ElevatedButton(
-                            style: buttonStyleGrey,
-                            onPressed: () => context.go("/history"),
-                            child: const Text("H"),
-                          ),
-                        ),
-                      )
+                      CalculatorButton(buttonStyle: buttonStyleGrey, symbol: '.'),
+                      CalculatorButton(buttonStyle: buttonStyleGrey, symbol: '('),
+                      CalculatorButton(buttonStyle: buttonStyleGrey, symbol: ')'),
                     ],
                   ),
                 ),

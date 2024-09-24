@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:ui/app.dart';
 import 'package:ui/calculator/cubit/calculator_cubit.dart';
 
 class CalculatorPage extends StatelessWidget {
@@ -22,69 +21,213 @@ class CalculatorView extends StatelessWidget {
   @override
   Widget build(BuildContext ctx) {
     final textTheme = Theme.of(ctx).textTheme;
+    final screenSize = MediaQuery.of(ctx).size;
+
+    final buttonStyle = ElevatedButton.styleFrom(
+      padding: const EdgeInsets.symmetric(vertical: 24.0),
+      textStyle: const TextStyle(fontSize: 24),
+      backgroundColor: const Color.fromARGB(255, 97, 97, 97),
+      foregroundColor: Colors.white,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(50),
+      ),
+    );
+
+    final buttonStyleOrange = ElevatedButton.styleFrom(
+      padding: const EdgeInsets.symmetric(vertical: 24.0),
+      textStyle: const TextStyle(fontSize: 24),
+      backgroundColor: Colors.orange,
+      foregroundColor: Colors.white,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(50),
+      ),
+    );
+
+    final buttonStyleRed = ElevatedButton.styleFrom(
+      padding: const EdgeInsets.symmetric(vertical: 24.0),
+      textStyle: const TextStyle(fontSize: 24),
+      backgroundColor: Colors.red,
+      foregroundColor: Colors.white,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(50),
+      ),
+    );
+
+    final buttonStyleGrey = ElevatedButton.styleFrom(
+      padding: const EdgeInsets.symmetric(vertical: 24.0),
+      textStyle: const TextStyle(fontSize: 24),
+      backgroundColor: const Color.fromARGB(255, 26, 23, 23),
+      foregroundColor: Colors.white,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(50),
+      ),  
+    );
+
     return Scaffold(
-      body: Center(
-        child: BlocBuilder<CalculatorCubit, String>(
-          builder: (context, state) => Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Row(
-                children: [
-                  Text(state, style: textTheme.displayMedium),
-                  TextButton(
-                      onPressed: () => context.go("/history"),
-                      child: Text("to history"))
-                ],
-              ),
-              Row(
-                children: [
-                  for (var i in ["-", "+", "*"])
-                    TextButton(
-                        onPressed: () =>
-                            context.read<CalculatorCubit>().insertOp(i),
-                        child: Text(i)),
-                ],
-              ),
-              Row(
-                children: [
-                  for (var i in [7, 8, 9])
-                    TextButton(
-                        onPressed: () => context
-                            .read<CalculatorCubit>()
-                            .insertSymbol(i.toString()),
-                        child: Text(i.toString())),
-                ],
-              ),
-              Row(
-                children: [
-                  for (var i in [4, 5, 6])
-                    TextButton(
-                        onPressed: () => context
-                            .read<CalculatorCubit>()
-                            .insertSymbol(i.toString()),
-                        child: Text(i.toString()))
-                ],
-              ),
-              Row(
-                children: [
-                  for (var i in [1, 2, 3])
-                    TextButton(
-                        onPressed: () => context
-                            .read<CalculatorCubit>()
-                            .insertSymbol(i.toString()),
-                        child: Text(i.toString()))
-                ],
-              ),
-              TextButton(
-                onPressed: context.read<CalculatorCubit>().evaluate,
-                child: const Text("="),
-              ),
-              TextButton(
-                  onPressed: context.read<CalculatorCubit>().eraseLast,
-                  child: const Text("<"))
-            ],
-          ),
+      backgroundColor: const Color.fromARGB(196, 81, 77, 77),
+      body: BlocBuilder<CalculatorCubit, String>(
+        builder: (context, state) {
+          final displayState = state.replaceAll('*', '×').replaceAll('/', '÷');
+
+          return Container(
+            width: screenSize.width,
+            height: screenSize.height,
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Expanded(
+                  flex: 2,
+                  child: Container(
+                    padding: const EdgeInsets.all(16.0),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(12), 
+                      color: const Color.fromARGB(255, 97, 97, 97),
+                    ),
+                    child: Align(
+                      alignment: Alignment.centerRight,
+                      child: Text(
+                        displayState, 
+                        style: textTheme.displayMedium?.copyWith(fontSize: 48, color: Colors.white),
+                        textAlign: TextAlign.right,
+                      ),
+                    ),
+                  ),
+                ),
+                Expanded(
+                  flex: 1,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      for (var i in ["-", "+", "×", "÷"])
+                        Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: ElevatedButton(
+                              style: buttonStyleGrey,
+                              onPressed: () => context
+                                  .read<CalculatorCubit>()
+                                  .insertOp(
+                                      i == "×" ? "*" : (i == "÷" ? "/" : i)),
+                              child: Text(i),
+                            ),
+                          ),
+                        ),
+                    ],
+                  ),
+                ),
+                Expanded(
+                  flex: 1,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      for (var i in [7, 8, 9])
+                        CalculatorButton(
+                            buttonStyle: buttonStyle, symbol: i.toString()),
+                      Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: ElevatedButton(
+                            style: buttonStyleOrange,
+                            onPressed: () =>
+                                context.read<CalculatorCubit>().evaluate(),
+                            child: const Text("="),
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+                Expanded(
+                  flex: 1,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      for (var i in [4, 5, 6])
+                        CalculatorButton(
+                            buttonStyle: buttonStyle, symbol: i.toString()),
+                      Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: ElevatedButton(
+                            style: buttonStyleGrey,
+                            onPressed: () =>
+                                context.read<CalculatorCubit>().eraseLast(),
+                            child: const Text("←"),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Expanded(
+                  flex: 1,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      for (var i in [1, 2, 3])
+                        CalculatorButton(
+                            buttonStyle: buttonStyle, symbol: i.toString()),
+                      Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: ElevatedButton(
+                            style: buttonStyleRed,
+                            onPressed: () =>
+                                context.read<CalculatorCubit>().eraseAll(),
+                            child: const Text("С"),
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+                Expanded(
+                  flex: 1,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      CalculatorButton(buttonStyle: buttonStyle, symbol: '00'),
+                      CalculatorButton(buttonStyle: buttonStyle, symbol: '0'),
+                      CalculatorButton(buttonStyle: buttonStyle, symbol: '.'),
+                      Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: ElevatedButton(
+                            style: buttonStyleGrey,
+                            onPressed: () => context.go("/history"),
+                            child: const Text("H"),
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          );
+        },
+      ),
+    );
+  }
+}
+
+class CalculatorButton extends StatelessWidget {
+  const CalculatorButton(
+      {super.key, required this.buttonStyle, required this.symbol});
+
+  final ButtonStyle buttonStyle;
+  final String symbol;
+
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: ElevatedButton(
+          style: buttonStyle,
+          onPressed: () => context.read<CalculatorCubit>().insertSymbol(symbol),
+          child: Text(symbol),
         ),
       ),
     );

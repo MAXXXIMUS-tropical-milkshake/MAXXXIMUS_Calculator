@@ -69,11 +69,8 @@ func (r *Router) deleteHistory(ctx *fiber.Ctx) error {
 	}
 
 	err = r.historyService.DeleteAllHistory(ctx.UserContext(), *userID)
-	if err != nil {
+	if err != nil && !errors.Is(err, core.ErrHistoryNotFound) {
 		logger.Log().Error(ctx.UserContext(), err.Error())
-		if errors.Is(err, core.ErrHistoryNotFound) {
-			return ctx.Status(fiber.StatusNotFound).JSON(model.ErrorResponse(err.Error()))
-		}
 		return ctx.Status(fiber.StatusInternalServerError).JSON(model.ErrorResponse(err.Error()))
 	}
 
@@ -95,11 +92,8 @@ func (r *Router) deleteHistoryByID(ctx *fiber.Ctx) error {
 	}
 
 	err = r.historyService.DeleteHistoryByID(ctx.UserContext(), historyID, *userID)
-	if err != nil {
+	if err != nil && !errors.Is(err, core.ErrHistoryNotFound) {
 		logger.Log().Error(ctx.UserContext(), err.Error())
-		if errors.Is(err, core.ErrHistoryNotFound) {
-			return ctx.Status(fiber.StatusNotFound).JSON(model.ErrorResponse(err.Error()))
-		}
 		return ctx.Status(fiber.StatusInternalServerError).JSON(model.ErrorResponse(err.Error()))
 	}
 

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
+import 'package:ui/app.dart';
 import 'package:ui/calculator/cubit/calculator_cubit.dart';
 
 class CalculatorPage extends StatelessWidget {
@@ -18,8 +20,8 @@ class CalculatorView extends StatelessWidget {
   const CalculatorView({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    final textTheme = Theme.of(context).textTheme;
+  Widget build(BuildContext ctx) {
+    final textTheme = Theme.of(ctx).textTheme;
     return Scaffold(
       body: Center(
         child: BlocBuilder<CalculatorCubit, String>(
@@ -27,7 +29,14 @@ class CalculatorView extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              Text(state, style: textTheme.displayMedium),
+              Row(
+                children: [
+                  Text(state, style: textTheme.displayMedium),
+                  TextButton(
+                      onPressed: () => context.go("/history"),
+                      child: Text("to history"))
+                ],
+              ),
               Row(
                 children: [
                   for (var i in ["-", "+", "*"])

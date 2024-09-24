@@ -1,5 +1,4 @@
 import 'package:bloc/bloc.dart';
-import 'package:http/http.dart' as http;
 import 'package:ui/calculator/calculator_client.dart';
 
 const _supportedOps = [
@@ -25,7 +24,8 @@ class CalculatorCubit extends Cubit<String> {
 
   void eraseLast() =>
       emit(state.isEmpty ? state : state.substring(0, state.length - 1));
+
   Future<void> evaluate() async {
-    emit(await CalculatorClient().calculate(state));
+    emit(await CalculatorClient.calculate(state));
   }
 }

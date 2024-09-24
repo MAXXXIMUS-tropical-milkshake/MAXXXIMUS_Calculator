@@ -5,5 +5,5 @@ import 'package:ui/calculator_observer.dart';
 
 void main() {
   Bloc.observer = const CalculatorObserver();
-  runApp(const CalculatorApp());
+  runApp(CalculatorApp());
 }

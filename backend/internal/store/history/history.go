@@ -3,6 +3,8 @@ package history
 import (
 	"context"
 	"errors"
+	"time"
+
 	"github.com/MAXXXIMUS-tropical-milkshake/MAXXXIMUS_Calculator/internal/core"
 	"github.com/MAXXXIMUS-tropical-milkshake/MAXXXIMUS_Calculator/pkg/logger"
 	"github.com/MAXXXIMUS-tropical-milkshake/MAXXXIMUS_Calculator/pkg/postgres"
@@ -17,6 +19,9 @@ func New(pg *postgres.Postgres) core.HistoryStore {
 }
 
 func (s *store) GetAllUserHistoryByID(ctx context.Context, userID int, params core.GetAllParams) ([]core.History, error) {
+	ctx, cancel := context.WithTimeout(ctx, 3*time.Second)
+	defer cancel()
+
 	var histories []core.History
 
 	query := s.DB.WithContext(ctx).Where("user_id = ?", userID).Select("id", "user_id", "expression", "created_at")
@@ -37,15 +42,21 @@ func (s *store) GetAllUserHistoryByID(ctx context.Context, userID int, params co
 }
 
 func (s *store) SaveHistory(ctx context.Context, history core.History) (data core.History, err error) {
+	ctx, cancel := context.WithTimeout(ctx, 3*time.Second)
+	defer cancel()
+
 	if err := s.DB.WithContext(ctx).Create(&history).Error; err != nil {
 		logger.Log().Error(ctx, err.Error())
 		return core.History{}, err
 	}
-	
+
 	return history, nil
 }
 
 func (s *store) DeleteAllHistory(ctx context.Context, userID int) (err error) {
+	ctx, cancel := context.WithTimeout(ctx, 3*time.Second)
+	defer cancel()
+
 	if err := s.DB.WithContext(ctx).Where("user_id = ?", userID).Delete(&core.History{}).Error; err != nil {
 		logger.Log().Error(ctx, err.Error())
 		if errors.Is(err, core.ErrRecordNotFound) {
@@ -58,6 +69,9 @@ func (s *store) DeleteAllHistory(ctx context.Context, userID int) (err error) {
 }
 
 func (s *store) DeleteHistoryByID(ctx context.Context, historyID, userID int) (err error) {
+	ctx, cancel := context.WithTimeout(ctx, 3*time.Second)
+	defer cancel()
+
 	if err := s.DB.WithContext(ctx).Where("id = ? AND user_id = ?", historyID, userID).Delete(&core.History{}).Error; err != nil {
 		logger.Log().Error(ctx, err.Error())
 		if errors.Is(err, core.ErrRecordNotFound) {

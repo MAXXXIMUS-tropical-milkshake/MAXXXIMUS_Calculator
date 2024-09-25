@@ -11,7 +11,7 @@ WORKDIR /ui
 COPY ./ui .
 RUN flutter pub get 
 RUN flutter config --enable-web
-RUN flutter build web 
+RUN flutter build web --release --web-renderer html
 
 FROM python:3
 WORKDIR /app

@@ -36,6 +36,7 @@ class CalculatorClient {
   }
 
   static Future<List<String>> fetchHistory() async {
+    return ["1", "2 + 3", "5 * 6 * 7"];
     final client = http.Client();
     final url = Uri.http('localhost:8080', 'api/v1/history', {"limit": "10"});
     // ignore: avoid_print

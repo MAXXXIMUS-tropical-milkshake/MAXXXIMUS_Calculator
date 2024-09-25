@@ -59,16 +59,18 @@ class CalculatorClearButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: ElevatedButton(
-          style: CalculatorButtonStyle.clear,
-          onPressed: () => context.read<CalculatorCubit>().eraseAll(),
-          child: const Text("С"),
+    return BlocBuilder<CalculatorCubit, String>(builder: (ctx, _) {
+      return Expanded(
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: ElevatedButton(
+            style: CalculatorButtonStyle.clear,
+            onPressed: () => ctx.read<CalculatorCubit>().eraseAll(),
+            child: const Text("С"),
+          ),
         ),
-      ),
-    );
+      );
+    });
   }
 }
 
@@ -79,16 +81,18 @@ class CalculatorEqualsButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: ElevatedButton(
-          style: CalculatorButtonStyle.equals,
-          onPressed: () => context.read<CalculatorCubit>().evaluate(),
-          child: const Text("="),
+    return BlocBuilder<CalculatorCubit, String>(builder: (ctx, _) {
+      return Expanded(
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: ElevatedButton(
+            style: CalculatorButtonStyle.equals,
+            onPressed: () => ctx.read<CalculatorCubit>().evaluate(ctx),
+            child: const Text("="),
+          ),
         ),
-      ),
-    );
+      );
+    });
   }
 }
 
@@ -102,16 +106,18 @@ class CalculatorOperationButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: ElevatedButton(
-          style: CalculatorButtonStyle.operation,
-          onPressed: () => context.read<CalculatorCubit>().insertOp(operation),
-          child: Text(operation),
+    return BlocBuilder<CalculatorCubit, String>(builder: (ctx, _) {
+      return Expanded(
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: ElevatedButton(
+            style: CalculatorButtonStyle.operation,
+            onPressed: () => ctx.read<CalculatorCubit>().insertOp(operation),
+            child: Text(operation),
+          ),
         ),
-      ),
-    );
+      );
+    });
   }
 }
 
@@ -125,16 +131,18 @@ class CalculatorSymButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: ElevatedButton(
-          style: CalculatorButtonStyle.operation,
-          onPressed: () => context.read<CalculatorCubit>().insertSym(sym),
-          child: Text(sym),
+    return BlocBuilder<CalculatorCubit, String>(builder: (ctx, _) {
+      return Expanded(
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: ElevatedButton(
+            style: CalculatorButtonStyle.operation,
+            onPressed: () => ctx.read<CalculatorCubit>().insertSym(sym),
+            child: Text(sym),
+          ),
         ),
-      ),
-    );
+      );
+    });
   }
 }
 
@@ -145,13 +153,15 @@ class CalculatorHistoryButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Align(
-        alignment: Alignment.center,
-        child: ElevatedButton(
-          style: CalculatorButtonStyle.history,
-          onPressed: () => context.go("/history"),
-          child: const Text("History"),
-        ));
+    return BlocBuilder<CalculatorCubit, String>(builder: (ctx, _) {
+      return Align(
+          alignment: Alignment.center,
+          child: ElevatedButton(
+            style: CalculatorButtonStyle.history,
+            onPressed: () => ctx.go("/history"),
+            child: const Text("History"),
+          ));
+    });
   }
 }
 
@@ -162,15 +172,17 @@ class CalculatorDigitButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: ElevatedButton(
-          style: CalculatorButtonStyle.digit,
-          onPressed: () => context.read<CalculatorCubit>().insertDigit(digit),
-          child: Text(digit),
+    return BlocBuilder<CalculatorCubit, String>(builder: (ctx, _) {
+      return Expanded(
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: ElevatedButton(
+            style: CalculatorButtonStyle.digit,
+            onPressed: () => ctx.read<CalculatorCubit>().insertDigit(digit),
+            child: Text(digit),
+          ),
         ),
-      ),
-    );
+      );
+    });
   }
 }

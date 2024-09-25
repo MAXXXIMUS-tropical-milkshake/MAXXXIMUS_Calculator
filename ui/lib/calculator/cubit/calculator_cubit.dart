@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:flutter/material.dart';
 import 'package:ui/calculator/calculator_client.dart';
 
 const _supportedOps = ["-", "+", "×", "÷"];
@@ -22,6 +23,7 @@ const _supportedDigits = [
 
 class CalculatorCubit extends Cubit<String> {
   CalculatorCubit() : super("");
+
   bool get _lastSymbolIsOp =>
       state.isNotEmpty && !_supportedOps.contains(state[state.length - 1]);
 
@@ -49,9 +51,16 @@ class CalculatorCubit extends Cubit<String> {
     emit("");
   }
 
-  Future<void> evaluate() async {
+  Future<void> evaluate(BuildContext context) async {
     if (state.isEmpty) return;
     final expr = state.replaceAll("×", "*").replaceAll("÷", "/");
-    emit(await CalculatorClient.calculate(expr));
+    final response = await CalculatorClient.calculate(expr);
+    emit(response?.toString() ?? "");
+    // ignore: use_build_context_synchronously
+    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        content: Text(
+      "Error pasrsing expression",
+      style: TextStyle(fontSize: 24),
+    )));
   }
 }

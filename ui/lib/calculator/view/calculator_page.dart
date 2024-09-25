@@ -22,9 +22,6 @@ class CalculatorView extends StatelessWidget {
   @override
   // ignore: avoid_renaming_method_parameters
   Widget build(BuildContext ctx) {
-    final textTheme = Theme.of(ctx).textTheme;
-    final screenSize = MediaQuery.of(ctx).size;
-
     return Scaffold(
       backgroundColor: const Color.fromARGB(196, 81, 77, 77),
       body: BlocBuilder<CalculatorCubit, String>(
@@ -36,7 +33,7 @@ class CalculatorView extends StatelessWidget {
               children: [
                 const CalculatorHistoryButton(),
                 const SizedBox(height: 10),
-                CalculatorDisplay(displayState: state, textTheme: textTheme),
+                const CalculatorDisplay(),
                 Expanded(
                   flex: 1,
                   child: Row(

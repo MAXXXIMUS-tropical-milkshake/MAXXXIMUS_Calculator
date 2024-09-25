@@ -56,6 +56,7 @@ class CalculatorCubit extends Cubit<String> {
     final expr = state.replaceAll("×", "*").replaceAll("÷", "/");
     final response = await CalculatorClient.calculate(expr);
     emit(response?.toString() ?? "");
+    if (response != null) return;
     // ignore: use_build_context_synchronously
     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
         content: Text(

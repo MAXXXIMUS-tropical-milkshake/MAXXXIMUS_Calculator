@@ -2,7 +2,8 @@ import 'package:bloc/bloc.dart';
 import 'package:ui/calculator/calculator_client.dart';
 
 const _supportedOps = ["-", "+", "×", "÷"];
-const _supportedNonOps = [
+const _supportedSyms = [".", "(", ")"];
+const _supportedDigits = [
   "1",
   "2",
   "3",
@@ -19,42 +20,38 @@ const _supportedNonOps = [
   ")"
 ];
 
-bool lastisop = false;
-
 class CalculatorCubit extends Cubit<String> {
   CalculatorCubit() : super("");
+  bool get _lastSymbolIsOp =>
+      state.isNotEmpty && !_supportedOps.contains(state[state.length - 1]);
 
-  void insertSymbol(String symbol) {
-    if (!_supportedNonOps.contains(symbol)) return;
+  void insertDigit(String symbol) {
+    if (!_supportedDigits.contains(symbol)) return;
     emit(state + symbol);
-    lastisop = false;
   }
 
   void insertOp(String op) {
     if (!_supportedOps.contains(op)) return;
-    if (state.isEmpty) return;
-    if (lastisop) {
-      emit(state.substring(0, state.length - 1) + op);
-      return;
-    }
+    if (state.isEmpty || !_lastSymbolIsOp) return;
     emit(state + op);
-    lastisop = true;
+  }
+
+  void insertSym(String sym) {
+    if (!_supportedSyms.contains(sym)) return;
+    emit(state + sym);
   }
 
   void eraseLast() {
     emit(state.isEmpty ? state : state.substring(0, state.length - 1));
-    lastisop = false;
   }
 
   void eraseAll() {
     emit("");
-    lastisop = false;
   }
 
   Future<void> evaluate() async {
     if (state.isEmpty) return;
-    if (lastisop) return;
-    emit(await CalculatorClient.calculate(state));
-    lastisop = false;
+    final expr = state.replaceAll("×", "*").replaceAll("÷", "/");
+    emit(await CalculatorClient.calculate(expr));
   }
 }

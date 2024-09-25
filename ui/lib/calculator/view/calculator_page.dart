@@ -96,9 +96,9 @@ class CalculatorView extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       CalculatorDigitButton(digit: '0'),
-                      CalculatorOperationButton(operation: '.'),
-                      CalculatorOperationButton(operation: '('),
-                      CalculatorOperationButton(operation: ')'),
+                      CalculatorSymButton(sym: '.'),
+                      CalculatorSymButton(sym: '('),
+                      CalculatorSymButton(sym: ')'),
                     ],
                   ),
                 ),

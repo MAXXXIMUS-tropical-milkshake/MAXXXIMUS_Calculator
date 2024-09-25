@@ -115,6 +115,29 @@ class CalculatorOperationButton extends StatelessWidget {
   }
 }
 
+class CalculatorSymButton extends StatelessWidget {
+  const CalculatorSymButton({
+    super.key,
+    required this.sym,
+  });
+
+  final String sym;
+
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: ElevatedButton(
+          style: CalculatorButtonStyle.operation,
+          onPressed: () => context.read<CalculatorCubit>().insertSym(sym),
+          child: Text(sym),
+        ),
+      ),
+    );
+  }
+}
+
 class CalculatorHistoryButton extends StatelessWidget {
   const CalculatorHistoryButton({
     super.key,
@@ -144,7 +167,7 @@ class CalculatorDigitButton extends StatelessWidget {
         padding: const EdgeInsets.all(8.0),
         child: ElevatedButton(
           style: CalculatorButtonStyle.digit,
-          onPressed: () => context.read<CalculatorCubit>().insertSymbol(digit),
+          onPressed: () => context.read<CalculatorCubit>().insertDigit(digit),
           child: Text(digit),
         ),
       ),

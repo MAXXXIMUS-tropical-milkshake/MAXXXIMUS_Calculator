@@ -1,19 +1,19 @@
 services:
-  # frontend: 
-  #   container_name: frontend
-  #   restart: always
-  #   build: 
-  #     context: .
-  #     dockerfile: ./ui/Dockerfile
-  #   ports: 
-  #     - "8000:8000"
-  #   networks:
-  #     - calculator
-  #   depends_on:
-  #     postgres:
-  #       condition: service_healthy
-  #   command: >
-  #     sh -c "python3 -m http.server 8000"
+  frontend: 
+    container_name: frontend
+    restart: always
+    build: 
+      context: .
+      dockerfile: ./ui/Dockerfile
+    ports: 
+      - "8000:8000"
+    networks:
+      - calculator
+    depends_on:
+      postgres:
+        condition: service_healthy
+    command: >
+      sh -c "python3 -m http.server 8000"
   backend:
     container_name: backend
     restart: always

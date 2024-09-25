@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ui/calculator/cubit/calculator_cubit.dart';
+import 'package:ui/calculator/cubit/history_cubit.dart';
 
 class CalculatorButtonStyle {
   static final _borderShape = RoundedRectangleBorder(
@@ -146,6 +147,28 @@ class CalculatorSymButton extends StatelessWidget {
   }
 }
 
+class CalculatorCalcButton extends StatelessWidget {
+  const CalculatorCalcButton({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<HistoryCubit, List<String>>(builder: (ctx, _) {
+      return Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Align(
+            alignment: Alignment.center,
+            child: ElevatedButton(
+              style: CalculatorButtonStyle.history,
+              onPressed: () => ctx.go("/calculator"),
+              child: const Text("Calculator"),
+            )),
+      );
+    });
+  }
+}
+
 class CalculatorHistoryButton extends StatelessWidget {
   const CalculatorHistoryButton({
     super.key,
@@ -154,13 +177,16 @@ class CalculatorHistoryButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<CalculatorCubit, String>(builder: (ctx, _) {
-      return Align(
-          alignment: Alignment.center,
-          child: ElevatedButton(
-            style: CalculatorButtonStyle.history,
-            onPressed: () => ctx.go("/history"),
-            child: const Text("History"),
-          ));
+      return Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Align(
+            alignment: Alignment.center,
+            child: ElevatedButton(
+              style: CalculatorButtonStyle.history,
+              onPressed: () => ctx.go("/history"),
+              child: const Text("History"),
+            )),
+      );
     });
   }
 }

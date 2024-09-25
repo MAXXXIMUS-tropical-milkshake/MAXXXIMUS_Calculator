@@ -8,21 +8,19 @@ class CalculatorApp extends MaterialApp {
 }
 
 final GoRouter _router = GoRouter(
+  initialLocation: "/calculator",
   routes: <RouteBase>[
     GoRoute(
-      path: '/',
+      path: '/calculator',
       builder: (BuildContext context, GoRouterState state) {
-        // TODO: call history fetch here mb?
         return const CalculatorPage();
       },
-      routes: <RouteBase>[
-        GoRoute(
-          path: 'history',
-          builder: (BuildContext context, GoRouterState state) {
-            return const HistoryPage();
-          },
-        ),
-      ],
+    ),
+    GoRoute(
+      path: '/history',
+      builder: (BuildContext context, GoRouterState state) {
+        return const HistoryPage();
+      },
     ),
   ],
 );

@@ -24,6 +24,10 @@ class CalculatorView extends StatelessWidget {
   Widget build(BuildContext ctx) {
     return Scaffold(
       backgroundColor: const Color.fromARGB(196, 81, 77, 77),
+      appBar: AppBar(
+        title: const CalculatorHistoryButton(),
+        backgroundColor: Colors.transparent,
+      ),
       body: BlocBuilder<CalculatorCubit, String>(
         builder: (context, state) {
           return Container(
@@ -31,7 +35,6 @@ class CalculatorView extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                const CalculatorHistoryButton(),
                 const SizedBox(height: 10),
                 const CalculatorDisplay(),
                 Expanded(
